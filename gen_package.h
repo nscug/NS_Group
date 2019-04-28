@@ -9,6 +9,7 @@ typedef struct
 	char ID_c[20];
 	char ID_v[20];
 	char ID_tgs[20];
+	char AD_c[16];
 	char Key_c_tgs[7];
 	char Key_c_v[7];
 	char Publickey_v_n[1024];

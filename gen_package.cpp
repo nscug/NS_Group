@@ -1,6 +1,6 @@
-#include "Gen_package.h"
+#include "gen_package.h"
 
-//INFO info = { "1","c111","","tgs111","","","","","2019.04.27.19:47:02","","","","","" };
+//INFO info1 = { "1","c111","","tgs111","","","","","","2019.04.27.19:47:02","","","","","" };
 
 void i_c4(int i,char *pp) {
 	int j;
@@ -18,140 +18,150 @@ void i_c4(int i,char *pp) {
 	strcpy(pp,p);
 }
 
-void Gen_package(INFO info, char* package) {
+void Gen_package(INFO* info, char* package) {
 	int i = 0;
 	char* p = NULL;
-	p = (char *)malloc(200*sizeof(char));
+	p = (char *)malloc(3224*sizeof(char));
 	char *pp = NULL;
 	pp = (char *)malloc(4*sizeof(char));
-	if (strcmp(info.type, "") == 0) {
+	if (strcmp(info->type, "") == 0) {
 		strcpy(package, "00-1");
 	}
 	else {
 		strcpy(package, "0001");
-		strcpy(p, info.type);
+		strcpy(p, info->type);
 	}
-	if (strcmp(info.ID_c, "") == 0) {
+	if (strcmp(info->ID_c, "") == 0) {
 		strcat(package, "00-1");
 	}
 	else {
 		i = strlen(p) + 1;
 		i_c4(i, pp);
 		strcat(package, pp);
-		strcat(p, info.ID_c);
+		strcat(p, info->ID_c);
 	}
-	if (strcmp(info.ID_v, "") == 0) {
+	if (strcmp(info->ID_v, "") == 0) {
 		strcat(package, "00-1");
 	}
 	else {
 		i = strlen(p) + 1;
 		i_c4(i, pp);
 		strcat(package, pp);
-		strcat(p, info.ID_v);
+		strcat(p, info->ID_v);
 	}
 
-	if (strcmp(info.ID_tgs, "") == 0) {
+	if (strcmp(info->ID_tgs, "") == 0) {
 		strcat(package, "00-1");
 	}
 	else {
 		i = strlen(p) + 1;
 		i_c4(i, pp);
 		strcat(package, pp);
-		strcat(p, info.ID_tgs);
+		strcat(p, info->ID_tgs);
 	}
-	if (strcmp(info.Key_c_tgs, "") == 0) {
+	if (strcmp(info->AD_c, "") == 0) {
 		strcat(package, "00-1");
 	}
 	else {
 		i = strlen(p) + 1;
 		i_c4(i, pp);
 		strcat(package, pp);
-		strcat(p, info.Key_c_tgs);
+		strcat(p, info->AD_c);
 	}
-	if (strcmp(info.Key_c_v, "") == 0) {
+	if (strcmp(info->Key_c_tgs, "") == 0) {
 		strcat(package, "00-1");
 	}
 	else {
 		i = strlen(p) + 1;
 		i_c4(i, pp);
 		strcat(package, pp);
-		strcat(p, info.Key_c_v);
+		strcat(p, info->Key_c_tgs);
 	}
-	if (strcmp(info.Publickey_v_n, "") == 0) {
+	if (strcmp(info->Key_c_v, "") == 0) {
 		strcat(package, "00-1");
 	}
 	else {
 		i = strlen(p) + 1;
 		i_c4(i, pp);
 		strcat(package, pp);
-		strcat(p, info.Publickey_v_n);
+		strcat(p, info->Key_c_v);
 	}
-	if (strcmp(info.Puclickey_v_e, "") == 0) {
+	if (strcmp(info->Publickey_v_n, "") == 0) {
 		strcat(package, "00-1");
 	}
 	else {
 		i = strlen(p) + 1;
 		i_c4(i, pp);
 		strcat(package, pp);
-		strcat(p, info.Puclickey_v_e);
+		strcat(p, info->Publickey_v_n);
 	}
-	if (strcmp(info.Timestamp, "") == 0) {
+	if (strcmp(info->Puclickey_v_e, "") == 0) {
 		strcat(package, "00-1");
 	}
 	else {
 		i = strlen(p) + 1;
 		i_c4(i, pp);
 		strcat(package, pp);
-		strcat(p, info.Timestamp);
+		strcat(p, info->Puclickey_v_e);
 	}
-	if (strcmp(info.Signature, "") == 0) {
+	if (strcmp(info->Timestamp, "") == 0) {
 		strcat(package, "00-1");
 	}
 	else {
 		i = strlen(p) + 1;
 		i_c4(i, pp);
 		strcat(package, pp);
-		strcat(p, info.Signature);
+		strcat(p, info->Timestamp);
 	}
-	if (strcmp(info.Lifetime, "") == 0) {
+	if (strcmp(info->Signature, "") == 0) {
 		strcat(package, "00-1");
 	}
 	else {
 		i = strlen(p) + 1;
 		i_c4(i, pp);
 		strcat(package, pp);
-		strcat(p, info.Lifetime);
+		strcat(p, info->Signature);
 	}
-	if (strcmp(info.Ticket, "") == 0) {
+	if (strcmp(info->Lifetime, "") == 0) {
 		strcat(package, "00-1");
 	}
 	else {
 		i = strlen(p) + 1;
 		i_c4(i, pp);
 		strcat(package, pp);
-		strcat(p, info.Ticket);
+		strcat(p, info->Lifetime);
 	}
-	if (strcmp(info.Sessionkey, "") == 0) {
+	if (strcmp(info->Ticket, "") == 0) {
 		strcat(package, "00-1");
 	}
 	else {
 		i = strlen(p) + 1;
 		i_c4(i, pp);
 		strcat(package, pp);
-		strcat(p, info.Sessionkey);
+		strcat(p, info->Ticket);
 	}
-	if (strcmp(info.Data, "") == 0) {
+	if (strcmp(info->Sessionkey, "") == 0) {
 		strcat(package, "00-1");
 	}
 	else {
 		i = strlen(p) + 1;
 		i_c4(i, pp);
 		strcat(package, pp);
-		strcat(p, info.Data);
+		strcat(p, info->Sessionkey);
 	}
+	if (strcmp(info->Data, "") == 0) {
+		strcat(package, "00-1");
+	}
+	else {
+		i = strlen(p) + 1;
+		i_c4(i, pp);
+		strcat(package, pp);
+		strcat(p, info->Data);
+	}
+	strcat(package, "0000000000000000000");
 	strcat(package, p);
-	/*printf("%s\n", package);
-	free(p);
+	printf("%s\n", package);
+	/*free(p);
 	p = NULL;
 	free(pp);
 	pp = NULL;*/
@@ -159,11 +169,12 @@ void Gen_package(INFO info, char* package) {
 
 /*
 调用说明：
+	INFO *info;
+	info=&info1;
 	char* package = NULL;
-	package = (char *)malloc(200 * sizeof(char));
+	package = (char *)malloc(3304*sizeof(char));
 	Gen_package(info, package);
 	……
 	free(package);
 	package = NULL;
 */
-
