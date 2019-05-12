@@ -16,3 +16,4 @@ T:\学习\学习大三下\NS_Client\NS_Client\obj\Release\NS_Client.csproj.Gener
 T:\学习\学习大三下\NS_Client\NS_Client\obj\Release\NS_Client.csproj.CoreCompileInputs.cache
 T:\学习\学习大三下\NS_Client\NS_Client\obj\Release\NS_Client.exe
 T:\学习\学习大三下\NS_Client\NS_Client\obj\Release\NS_Client.pdb
+T:\学习\学习大三下\NS_Client\NS_Client\obj\Release\NS_Client.csprojAssemblyReference.cache
