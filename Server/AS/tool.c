@@ -392,7 +392,7 @@ void DES_encryption(unsigned char*M,long long length,unsigned char*key,unsigned 
         printf("\n");*/
 		
 		
-		Log((char*)extend_key,56,0);
+		//Log((char*)extend_key,56,0);
         myReduce8_1(extend_C,_C);
 
         memcpy(C+index,_C,8);
@@ -445,12 +445,12 @@ void gen_ticket(INFO* info,char* keyFilePath){
 	FILE* file =fopen("ticketTmp.txt","w"); 
 	fwrite(data,1,strlen(data),file);
 	fclose(file);
-	Log("RSA Encryption",strlen("RSA Encryption"),1);
-	Log(data,strlen(data),1);
+	//Log("RSA Encryption",strlen("RSA Encryption"),1);
+	//Log(data,strlen(data),1);
 	RSA_encryption("ticketTmp.txt",keyFilePath,"result.txt");
 	file =fopen("result.txt","r");
 	fscanf(file,"%s",info->Ticket);
-	Log(info->Ticket,strlen(info->Ticket),1);
+	//Log(info->Ticket,strlen(info->Ticket),1);
 	fclose(file);
 	
 	char cmd[256];
@@ -466,13 +466,13 @@ int findDB(char* DBName,char* CMD,char* rFilePath){
 	int t,flag;
 	mysql_init(&mysql);
 	if(!mysql_real_connect(&mysql,"localhost","root","root",DBName,0,NULL,0)){
-		Log("DB Connect filed",strlen("DB Connect filed"),1);
+		//Log("DB Connect filed",strlen("DB Connect filed"),1);
 		return -2;
 	}
 	else{
 		flag =mysql_real_query(&mysql,CMD,(unsigned int)strlen(CMD));
 		if(flag){
-			Log("DB Query filed",strlen("DB Query filed"),1);
+			//Log("DB Query filed",strlen("DB Query filed"),1);
 			return -1;
 		}
 		else{
@@ -551,11 +551,15 @@ void Respond_As(char* data,int socket,char* IP){
 	printf("%s\n",tmp.ID_c);
 	char log[1024];
 	sprintf(log,"%s Authentication Request",IP);
-	Log(log,strlen(log),1);
+	//Log(log,strlen(log),1);
 	char CMD1[256],CMD2[256];
 	sprintf(CMD1,"select Password_Hash from User where ID_c ='%s'",tmp.ID_c);
 	sprintf(CMD2,"select * from TGS where ID_tgs ='%s'",tmp.ID_tgs);
-	if((findDB("WS",CMD1,"User.txt") == -1) || (findDB("WS",CMD2,"TGS.txt") ==-1)){
+	
+	char filename1[32],filename2[32];
+	sprintf(filename1,"%sUser.txt",IP);
+	sprintf(filename2,"%sTGS.txt",IP);
+	if((findDB("WS",CMD1,filename1) == -1) || (findDB("WS",CMD2,filename2) ==-1)){
 		char M[4096];
 		strcpy(tmp.type,"0003");
 		Gen_package(&tmp,M);
@@ -564,7 +568,7 @@ void Respond_As(char* data,int socket,char* IP){
 	else{
 		
 		unsigned char md5[32],key[7];
-		FILE* file =fopen("User.txt","r");
+		FILE* file =fopen(filename1,"r");
 		fscanf(file,"%s",md5);
 		//printf("%s",md5);
 		MD5to56(md5,key);
@@ -574,7 +578,7 @@ void Respond_As(char* data,int socket,char* IP){
 		sprintf(tmp.Key_c_tgs,"%d",rand()%9000000+1000000);
 		strcpy(tmp.AD_c,IP);
 		strcpy(tmp.type,"0002");
-		gen_ticket(&tmp,"TGS.txt");
+		gen_ticket(&tmp,filename2);
 		gen_TS(tmp.Timestamp);
 		strcpy(tmp.Lifetime,"0300");//gen info
 		
@@ -589,13 +593,13 @@ void Respond_As(char* data,int socket,char* IP){
 		char* extendM =(char*)malloc(sizeof(char)*length);
 		//char* extendM1 =(char*)malloc(sizeof(char)*length);
 		memcpy(extendM,M+80,length);
-		Log("DES encryption",strlen("DES encryption"),1);
-		Log(extendM,length,1);
+		//Log("DES encryption",strlen("DES encryption"),1);
+		//Log(extendM,length,1);
 		//log DES加密 明文：
 		DES_encryption((unsigned char* )extendM,length,key,(unsigned char*)extendC);
 		//DES_decryption((unsigned char* )extendC,(length/8 +1)*8,key,(unsigned char*)extendM1)
 		//log DES加密 密文
-		Log(extendC,length,0);
+		//Log(extendC,length,0);
 		memcpy(M+80,extendC,length);
 		//strncpy(M+80,extendC,(length/8 +1)*8);
 		//memcpy(extendC1,M+80,length);
@@ -606,10 +610,10 @@ void Respond_As(char* data,int socket,char* IP){
 		//free(extendC1);
 		//free(extendM1);
 	}
-	char cmd[256];
+	/*char cmd[256];
 	sprintf(cmd,"rm %s %s","TGS.txt","User.txt");
 	FILE* file =popen(cmd,"r");
-	pclose(file);
+	pclose(file);*/
 }
 
 
