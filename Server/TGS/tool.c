@@ -457,7 +457,7 @@ int findDB(char* DBName,char* CMD,char* rFilePath){
 	MYSQL_ROW row;
 	int t,flag;
 	mysql_init(&mysql);
-	if(!mysql_real_connect(&mysql,"localhost","root","root",DBName,0,NULL,0)){
+	if(!mysql_real_connect(&mysql,"192.168.1.144","root","root",DBName,0,NULL,0)){
 		Log("DB Connect filed",strlen("DB Connect filed"),1);
 		return -2;
 	}
