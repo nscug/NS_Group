@@ -457,7 +457,7 @@ int findDB(char* DBName,char* CMD,char* rFilePath){
 	MYSQL_ROW row;
 	int t,flag;
 	mysql_init(&mysql);
-	if(!mysql_real_connect(&mysql,"localhost","root","root",DBName,0,NULL,0)){
+	if(!mysql_real_connect(&mysql,"192.168.1.144","root","root",DBName,0,NULL,0)){
 		Log("DB Connect filed",strlen("DB Connect filed"),1);
 		return -2;
 	}
@@ -492,7 +492,10 @@ void Respond_TGS(char* data,int socket,char* IP){
 	char CMD2[256];
 	//sprintf(CMD1,"select Password_Hash from User where ID_c ='%s'",tmp.ID_c);
 	sprintf(CMD2,"select * from Server where ID_v ='%s'",tmp.ID_v);
-	if((findDB("WS",CMD2,"V.txt") ==-1) || (ana_ticket(&tmp,"TGS_Sk.txt") ==-1)){
+	
+	char filename[32];
+	sprintf(filename,"%sV.txt",IP);
+	if((findDB("WS",CMD2,filename) ==-1) || (ana_ticket(&tmp,"TGS_Sk.txt") ==-1)){
 		char M[4096];
 		strcpy(tmp.type,"0006");
 		Gen_package(&tmp,M);
@@ -504,7 +507,7 @@ void Respond_TGS(char* data,int socket,char* IP){
 		//md5 to 56
 		strcpy(tmp.type,"0005");
 		sprintf(tmp.Key_c_v,"%d",rand()%9000000+1000000);
-		gen_ticket(&tmp,"V.txt");
+		gen_ticket(&tmp,filename);
 		gen_TS(tmp.Timestamp);
 		strcpy(tmp.Lifetime,"0300");//gen info
 		

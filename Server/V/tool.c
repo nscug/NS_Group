@@ -458,14 +458,14 @@ int findDB(char* DBName,char* CMD,char* rFilePath){
 	MYSQL_ROW row;
 	int t,flag;
 	mysql_init(&mysql);
-	if(!mysql_real_connect(&mysql,"localhost","root","root",DBName,0,NULL,0)){
-		Log("DB Connect filed",strlen("DB Connect filed"),1);
+	if(!mysql_real_connect(&mysql,"192.168.1.144","root","root",DBName,0,NULL,0)){
+		//Log("DB Connect filed",strlen("DB Connect filed"),1);
 		return -2;
 	}
 	else{
 		flag =mysql_real_query(&mysql,CMD,(unsigned int)strlen(CMD));
 		if(flag){
-			Log("DB Query filed",strlen("DB Query filed"),1);
+			//Log("DB Query filed",strlen("DB Query filed"),1);
 			return -1;
 		}
 		else{
@@ -492,8 +492,8 @@ int ana_Ticket(INFO* info,char* keyFilePath){
 	FILE* file =fopen("ticketTmp.txt","w");
 	fprintf(file,"%s",info->Ticket);
 	fclose(file);
-	Log("RSA decryption",strlen("RSA decryption"),1);
-	Log(info->Ticket,strlen(info->Ticket),1);
+	//Log("RSA decryption",strlen("RSA decryption"),1);
+	//Log(info->Ticket,strlen(info->Ticket),1);
 	RSA_decryption("ticketTmp.txt",keyFilePath,"result.txt");
 	
 	file =fopen("result.txt","r");
@@ -502,7 +502,7 @@ int ana_Ticket(INFO* info,char* keyFilePath){
 	rewind(file);
 	memset(log,0,128);
 	fread(log,1,size,file);
-	Log(log,strlen(log),1);
+	//Log(log,strlen(log),1);
 	char* p;
 	p =strtok(log,";");
 	int i=0;
@@ -566,7 +566,7 @@ void Respond_7(char* data,int socket,char* IP){
 	if( ana_Ticket(&info,"Sk.txt") ==-1){
 		char log[256];
 		sprintf(log,"%s Illegal request",IP);
-		Log(log,strlen(log),1);
+		//Log(log,strlen(log),1);
 		char M[4096];
 		strcpy(info.type,"0009");
 		Gen_package(&info,M);
@@ -587,14 +587,14 @@ void Respond_7(char* data,int socket,char* IP){
 		char* extendM =(char*)malloc(sizeof(char)*length);
 		//char* extendM1 =(char*)malloc(sizeof(char)*length);
 		memcpy(extendM,M+80,length);
-		Log("DES encryption",strlen("DES encryption"),1);
-		Log(extendM,length,1);
+		//Log("DES encryption",strlen("DES encryption"),1);
+		//Log(extendM,length,1);
 		//log DES加密 明文：
 		//printf("%s\n",tmp.Key_c_v);
 		DES_encryption((unsigned char* )extendM,length,(unsigned char*)info.Key_c_v,(unsigned char*)extendC);
 		//DES_decryption((unsigned char* )extendC,(length/8 +1)*8,key,(unsigned char*)extendM1)
 		//log DES加密 密文
-		Log(extendC,length,0);
+		//Log(extendC,length,0);
 		memcpy(M+80,extendC,length);
 		
 		send(socket,M,4096,0);
@@ -606,7 +606,7 @@ void Respond_7(char* data,int socket,char* IP){
 void Respond_10(char* data,int socket,char* IP){
 	char log[256];
 	sprintf(log,"%s Certificate exchange",IP);
-	Log(log,strlen(log),1);
+	//Log(log,strlen(log),1);
 	INFO info ={""};
 	Analysis(data,strlen(data),&info);
 	char clientPk[64];
@@ -628,7 +628,7 @@ void Respond_10(char* data,int socket,char* IP){
 void Respond_12(char* data,int socket,char* IP,unsigned char* key){//密钥交换
 	char log[256];
 	sprintf(log,"%s Sessionkey exchange",IP);
-	Log(log,strlen(log),1);
+	//Log(log,strlen(log),1);
 	
 	
 	INFO info ={""};
@@ -639,28 +639,31 @@ void Respond_12(char* data,int socket,char* IP,unsigned char* key){//密钥交�
 	fwrite(info.Data,1,strlen(info.Data),file);
 	//fprintf(file,"%s",info.Data);
 	fclose(file);
-	Log("RSA decryption",strlen("RSA decryption"),1);
-	Log(info.Data,strlen(info.Data),1);
+	//Log("RSA decryption",strlen("RSA decryption"),1);
+	//Log(info.Data,strlen(info.Data),1);
 	RSA_decryption("ticketTmp.txt","Sk.txt","result.txt");
 	
 	file =fopen("result.txt","r");
 	fscanf(file,"%s",key);
-	Log((char*)key,strlen((char*)key),1);
+	printf("%s",key);
+	//Log((char*)key,strlen((char*)key),1);
 	
-	char cmd[256];
+	/*char cmd[256];
 	sprintf(cmd,"rm %s %s","ticketTmp.txt","result.txt");
 	file =popen(cmd,"r");
-	pclose(file);
+	pclose(file);*/
 }
 
 void Respond_13(char* data,int socket,char* IP){
 	char log[256];
 	sprintf(log,"%s Request all data",IP);
-	Log(log,strlen(log),1);
+	//Log(log,strlen(log),1);
 	char CMD1[] ={"select * from Info"};
-	findDB("WS",CMD1,"Info.txt");
-	Concealment("Info.txt");
-	FILE* file =fopen("Info.txt","r");
+	char filename[32];
+	sprintf(filename,"%sInfo.txt",IP);
+	findDB("WS",CMD1,filename);
+	Concealment(filename);
+	FILE* file =fopen(filename,"r");
 	fseek(file,0,SEEK_END);
 	int size =ftell(file);
 	rewind(file);
@@ -684,7 +687,7 @@ void Respond_13(char* data,int socket,char* IP){
 void Respond_14(char* data,int socket,char* IP,unsigned char* key){//特定数据获取
 	char log[256];
 	sprintf(log,"%s Request data",IP);
-	Log(log,strlen(log),1);
+	//Log(log,strlen(log),1);
 	
     INFO info={""};
 	Analysis(data,strlen(data),&info);
@@ -702,10 +705,12 @@ void Respond_14(char* data,int socket,char* IP,unsigned char* key){//特定数�
 		
 		char CMD1[256];
 		sprintf(CMD1,"select PhoneNum from Info where ID ='%s'",info.Data);
-		if(findDB("WS",CMD1,"PhoneNum.txt") != -1){
+		char filename[32];
+		sprintf(filename,"%sPhoneNum.txt",IP);
+		if(findDB("WS",CMD1,filename) != -1){
 			INFO tmp={""};
 			strcpy(tmp.type,"0016");
-			FILE* file =fopen("PhoneNum.txt","r");
+			FILE* file =fopen(filename,"r");
 			fscanf(file,"%s",tmp.Data);
 			fclose(file);//gen data
 			
@@ -732,9 +737,10 @@ void Respond_14(char* data,int socket,char* IP,unsigned char* key){//特定数�
 			char* extendM =(char*)malloc(sizeof(char)*length);
 			//char* extendM1 =(char*)malloc(sizeof(char)*length);
 			memcpy(extendM,M+80,length);
-			Log("DES encryption",strlen("DES encryption"),1);
-			Log(extendM,length,1);
+			//Log("DES encryption",strlen("DES encryption"),1);
+			//Log(extendM,length,1);
 			//log DES加密 明文：
+			printf("%s\n",key);
 			DES_encryption((unsigned char* )extendM,length,key,(unsigned char*)extendC);
 			//DES_decryption((unsigned char* )extendC,(length/8 +1)*8,key,(unsigned char*)extendM1)
 			//log DES加密 密文
@@ -751,14 +757,14 @@ void Respond_14(char* data,int socket,char* IP,unsigned char* key){//特定数�
 void Respond_17(char* data,int socket,char* IP,unsigned char* key){//RSA出错反馈
 	char log[256];
 	sprintf(log,"%s RSA ERROR",IP);
-	Log(log,strlen(log),1);
+	//Log(log,strlen(log),1);
 	Respond_14(data,socket,IP,key);
 }
 
 void Respond_V(char* data,int socket,char* IP,unsigned char* sessionKey){
 	char log[1024];
 	sprintf(log,"%s Authentication Request",IP);
-	Log(log,strlen(log),1);
+	//Log(log,strlen(log),1);
 	
 	char type[4];
 	memcpy(type,data,4);//获取包类型
@@ -781,7 +787,7 @@ void Respond_V(char* data,int socket,char* IP,unsigned char* sessionKey){
 		Respond_17(data,socket,IP,sessionKey);
 	}
 	else{
-		Log("Unknow package type",strlen("Unknow package type"),1);
+		//Log("Unknow package type",strlen("Unknow package type"),1);
 	}
 	/*INFO tmp ={""};
 	Analysis(data,strlen(data),&tmp);
