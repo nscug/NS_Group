@@ -81,9 +81,13 @@ int Authentication(char* ID, char* password){
         memcpy(extendC,package+80,length);
 
         Log("DES decryption",strlen("DES decryption"),1);
+		file =fopen("AS_decryption.txt","w");
+		fwrite(extendC,1,length,file);
         Log(extendC,length,0);
         DES_decryption(extendC,length,key,extendM);
         Log(extendM,length,1);
+		fwrite(extendM,1,length,file);
+		fclose(file);
         memcpy(package+80,extendM,length);
         memset(&tmp,0,sizeof(tmp));
         Analysis(package,strlen(package),&tmp);
@@ -143,6 +147,14 @@ int Authentication(char* ID, char* password){
             Log(extendM,length,1);
             memcpy(package+80,extendM,length);
 
+
+        file =fopen("TGS_decryption.txt","w");
+		fwrite(extendC,1,length,file);
+        //Log(extendC,length,0);
+        //DES_decryption(extendC,length,key,extendM);
+        //Log(extendM,length,1);
+		fwrite(extendM,1,length,file);
+		fclose(file);
             memset(&tmp,0,sizeof(tmp));
             Analysis(package,strlen(package),&tmp);
             if(strcmp(tmp.type,type) != 0){
@@ -199,6 +211,13 @@ int Authentication(char* ID, char* password){
                 Log(extendM,length,1);
                 memcpy(package+80,extendM,length);
 
+				file =fopen("V_decryption.txt","w");
+				fwrite(extendC,1,length,file);
+				//Log(extendC,length,0);
+				//DES_decryption(extendC,length,key,extendM);
+				//Log(extendM,length,1);
+				fwrite(extendM,1,length,file);
+				fclose(file);
                 memset(&tmp,0,sizeof(tmp));
                 Analysis(package,strlen(package),&tmp);
                 if(strcmp(type,tmp.type) != 0){
