@@ -282,13 +282,16 @@ int RSA_authentic(char* data, char* signature, char* keyFilePath)
 		sprintf(d2 + i * 2, "%02x", d[i]);
 	}
 	char resultFilePath[] = "result.txt";
+	Log("decryption signature",strlen("decryption signature"),1);
 	RSA_decryption("tmp.txt", keyFilePath, resultFilePath);
 	//MD5IN((unsigned char*)data,(unsigned char*)b);//µ÷ÓÃMD5º¯Êý
 	file = fopen(resultFilePath, "r");
 	char result[33];
 	fgets(result, 33, (FILE*)file);
 	fclose(file);
-	//Log(b1,32,1);
+	Log(result,33,1);
+	Log("data hash",strlen("data hash"),1);
+	Log(d2,32,1);
 	if (strcmp(d2, result) == 0) {
 		/*char cmd[256];
 		sprintf(cmd,"rm %s %s","tmp.txt","result.txt");

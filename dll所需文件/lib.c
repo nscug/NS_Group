@@ -368,6 +368,7 @@ int Search(char* ID,int Socket){
 	Analysis(package, strlen(package), &info);
 
 
+	Log("RSA signature authentic",strlen("RSA signature authentic"),1);
 	int i = RSA_authentic(info.Data, info.Signature, "V_certificate.txt");//0 RSA签名认证成功
 	if (i == 0) {
 		file = fopen("phoneNum.txt", "w");
